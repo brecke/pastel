@@ -3,14 +3,19 @@
   import LocalAuthStrategy from "./LocalAuthStrategy.svelte";
   import { values, pipe, last, split, equals } from "ramda";
   import anylogger from "anylogger";
-  import { beforeUpdate, onMount } from "svelte";
-  import { user } from "../stores/user";
+  import { onMount } from "svelte";
+  import { getCurrentUser, user } from "../stores/user";
+  import { authenticationAPI } from "../helpers/authentication";
+  import { useNavigate } from "svelte-navigator";
+  const navigate = useNavigate();
+
   import "@material/mwc-dialog";
   import "@material/mwc-button";
   import "@material/mwc-textfield";
 
   const log = anylogger("home-nav");
-  const DEFAULT_LOGO = "oae-logo.svg";
+  const askAuthAPI = authenticationAPI();
+  const { logout } = askAuthAPI;
 
   export let authenticationStrategy;
   let tenantLogo;
@@ -27,6 +32,25 @@
       authenticationStrategy.enabledExternalStrategies
     );
   }
+
+  const DEFAULT_LOGO = "oae-logo.svg";
+  const didLogout = equals(200);
+
+  const logoutUser = async () => {
+    try {
+      const status = await logout();
+      if (didLogout(status)) {
+        user.set(await getCurrentUser());
+        navigate("/");
+      } else {
+        // TODO: trouble logging out
+        log.debug(`Logout returned unexpected status: ${status}`);
+      }
+    } catch (error) {
+      // TODO make something visible to indicate logout
+      log.debug(`Unable to logout.`);
+    }
+  };
 
   const showSignInModal = () => {
     modalWindow.open = true;
@@ -65,7 +89,11 @@
     <div class="navbar-end navEnd">
       <div class="navbar-item">
         {#if $user.isLoggedIn}
-          <div>USER AVATAR</div>
+          <a
+            class="button is-round"
+            on:click|preventDefault={logoutUser}
+            href="/">Logout</a
+          >
         {:else}
           <div class="buttons">
             <mwc-dialog

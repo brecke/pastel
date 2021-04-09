@@ -7,12 +7,14 @@
   import "@material/mwc-button";
   import "@material/mwc-textfield";
   import { when, equals, defaultTo, prop, compose, isEmpty, not } from "ramda";
+  import { useNavigate } from "svelte-navigator";
 
   import { resetField } from "../helpers/form";
   import { authenticationAPI } from "../helpers/authentication";
   import { authConstants } from "../helpers/constants";
-  import { afterUpdate } from "svelte";
+  import { onMount } from "svelte";
 
+  const navigate = useNavigate();
   const log = anylogger("local-auth-strategy");
   const { STRATEGY_LDAP, STRATEGY_LOCAL } = authConstants;
   const askAuthAPI = authenticationAPI();
@@ -96,7 +98,10 @@
        * window.location.href = $user.getUserRedirectUrl();
        */
       formValidation = { failed: false, message: "" };
-      window.location.href = "/dashboard";
+      log.debug(`Authentication succeeded, redirecting to the activity feed..`);
+      navigate("/dashboard");
+
+      // window.location.href = "/dashboard";
     } else if (failedAuthentication(status)) {
       formValidation = { failed: true, message: "Wrong credentials" };
       clearPasswordField();
@@ -108,14 +113,12 @@
     passwordField.focus();
   };
 
-  afterUpdate(async () => {
+  onMount(async () => {
     submitButton.addEventListener("click", async (event) => {
       await handleSubmit(event);
     });
   });
 
-  /*
-   */
   const onKeyPress = async (event: KeyboardEvent) => {
     when(wasEnterKeyPressed, handleSubmit, event);
   };

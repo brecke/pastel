@@ -6,7 +6,6 @@ const log = anylogger("user-store");
 const user = writable(new User());
 const redirectUrl = writable("");
 const invitationInfo = writable({ email: "", token: "" });
-// const authenticationStrategy = writable({});
 
 const getCurrentUser = async () => {
   try {
@@ -28,11 +27,4 @@ function createTenantConfig() {
 }
 const tenantConfig = createTenantConfig();
 
-export {
-  getCurrentUser,
-  user,
-  redirectUrl,
-  invitationInfo,
-  tenantConfig,
-  // authenticationStrategy,
-};
+export { getCurrentUser, user, redirectUrl, invitationInfo, tenantConfig };

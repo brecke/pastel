@@ -261,6 +261,16 @@ const signInViaLDAP = async (
   }
 };
 
+const logout = async () => {
+  try {
+    const response = await fetch("/api/auth/logout", { method: "POST" });
+    return response.status;
+  } catch (error) {
+    log.error(`Logout failed!`, error);
+    throw error;
+  }
+};
+
 const signInViaLocalAuth = async (
   username: string,
   password: string,
@@ -316,5 +326,6 @@ export function authenticationAPI() {
     signInViaLDAP,
     signInViaLocalAuth,
     tryLDAPFirstLocalAuthSecond,
+    logout,
   };
 }

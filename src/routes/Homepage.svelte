@@ -8,18 +8,22 @@
 
   import {
     getCurrentUser,
+    redirectUrl,
     user,
     tenantConfig,
     invitationInfo,
   } from "../stores/user";
   import { authenticationAPI } from "../helpers/authentication";
-  import { getInvitationInfo } from "../helpers/utils";
+  import {
+    getLoginRedirectUrl as getRedirectUrl,
+    getInvitationInfo,
+  } from "../helpers/utils";
 
   let authenticationStrategy = {};
 
   onMount(async () => {
-    // redirectUrl = getRedirectUrl();
-    // log.debug(`redirectUrl: ${redirectUrl}`);
+    redirectUrl.set(getRedirectUrl());
+    log.debug(`redirectUrl: ${redirectUrl}`);
 
     // Variable that keeps track of the invitation info that is available in the page context, if any
     invitationInfo.set(getInvitationInfo());
