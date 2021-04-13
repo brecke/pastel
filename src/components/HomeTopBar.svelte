@@ -4,20 +4,22 @@
   import { values, pipe, last, split, equals } from "ramda";
   import anylogger from "anylogger";
   import { onMount } from "svelte";
-  import { getCurrentUser, user } from "../stores/user";
-  import { authenticationAPI } from "../helpers/authentication";
-  import { useNavigate } from "svelte-navigator";
-  const navigate = useNavigate();
+  import { user } from "../stores/user";
 
   import "@material/mwc-dialog";
   import "@material/mwc-button";
   import "@material/mwc-textfield";
 
   const log = anylogger("home-nav");
-  const askAuthAPI = authenticationAPI();
-  const { logout } = askAuthAPI;
+  const DEFAULT_LOGO = "oae-logo.svg";
 
   export let authenticationStrategy;
+  $: {
+    enabledExternalStrategies = values(
+      authenticationStrategy.enabledExternalStrategies
+    );
+  }
+
   let tenantLogo;
   let modalWindow;
   let enabledExternalStrategies: {
@@ -26,31 +28,6 @@
     url: string;
     name: string;
   }[];
-
-  $: {
-    enabledExternalStrategies = values(
-      authenticationStrategy.enabledExternalStrategies
-    );
-  }
-
-  const DEFAULT_LOGO = "oae-logo.svg";
-  const didLogout = equals(200);
-
-  const logoutUser = async () => {
-    try {
-      const status = await logout();
-      if (didLogout(status)) {
-        user.set(await getCurrentUser());
-        navigate("/");
-      } else {
-        // TODO: trouble logging out
-        log.debug(`Logout returned unexpected status: ${status}`);
-      }
-    } catch (error) {
-      // TODO make something visible to indicate logout
-      log.debug(`Unable to logout.`);
-    }
-  };
 
   const showSignInModal = () => {
     modalWindow.open = true;
@@ -89,11 +66,7 @@
     <div class="navbar-end navEnd">
       <div class="navbar-item">
         {#if $user.isLoggedIn}
-          <a
-            class="button is-round"
-            on:click|preventDefault={logoutUser}
-            href="/">Logout</a
-          >
+          <span class="warning">{$user.displayName} is logged in</span>
         {:else}
           <div class="buttons">
             <mwc-dialog
@@ -181,5 +154,10 @@
       border-color: #3a71ed;
       color: white;
     }
+  }
+
+  // Experiments
+  .warning {
+    color: darkred;
   }
 </style>

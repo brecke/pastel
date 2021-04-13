@@ -1,6 +1,5 @@
 import { User } from "./user";
 import { prop, includes } from "ramda";
-// import { makeAutoObservable } from 'mobx';
 
 import anylogger from "anylogger";
 const log = anylogger("activity-model");
@@ -33,10 +32,7 @@ export class ActivityItem {
   allComments: Comment[];
   latestComments: Comment[];
 
-  // function (activity, summary, primaryActor, activityItems) {
   constructor(rawActivity) {
-    // makeAutoObservable(this);
-
     this.id = getId(rawActivity);
     this.activityType = getType(rawActivity);
     this.published = new Date(rawActivity.published);
@@ -53,8 +49,6 @@ export class ActivityItem {
       this.allComments = rawActivity.object["oae:collection"];
       this.latestComments = rawActivity.object.latestComments;
     }
-
-    log.debug(`new activity model created;`);
   }
 
   generateSummary(actor, verb, object) {
