@@ -1,10 +1,9 @@
 import { assoc, replace, pipe, prop, defaultTo } from "ramda";
-
 const INVITATION_TOKEN = "invitationToken";
 const INVITATION_EMAIL = "invitationEmail";
 
-function getLoginRedirectUrl() {
-  const parameters = new URL(document.location.toString()).searchParams;
+function getRedirectUrl(location = document.location.toString()) {
+  const parameters = new URL(location).searchParams;
   return defaultTo("", parameters.get("url"));
 }
 
@@ -24,12 +23,15 @@ function getUrlParameters(url) {
   return parameters;
 }
 
-function getInvitationInfo() {
+function getInvitationInfo(location) {
+  /*
   const parameters = pipe(
-    getLoginRedirectUrl,
+    getRedirectUrl(location),
     defaultTo(""),
     getUrlParameters
   )();
+  */
+  const parameters = getUrlParameters(defaultTo("", getRedirectUrl(location)));
   const extractURLParameter = (parameterName) =>
     pipe(prop(parameterName), decodeURIComponent)(parameters);
 
@@ -42,4 +44,4 @@ function getInvitationInfo() {
   };
 }
 
-export { getLoginRedirectUrl, getInvitationInfo };
+export { getRedirectUrl, getInvitationInfo };

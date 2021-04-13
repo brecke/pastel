@@ -18,19 +18,28 @@
     getLoginRedirectUrl as getRedirectUrl,
     getInvitationInfo,
   } from "../helpers/utils";
+  import { getRedirectUrl, getInvitationInfo } from "../helpers/utils";
+  let log = anylogger("homepage");
 
   let authenticationStrategy = {};
 
   onMount(async () => {
     redirectUrl.set(getRedirectUrl());
     log.debug(`redirectUrl: ${redirectUrl}`);
+    redirectUrl.set(getRedirectUrl(document.location.toString()));
+    log.warn(`redirectUrl:`);
+    log.warn($redirectUrl);
 
     // Variable that keeps track of the invitation info that is available in the page context, if any
     invitationInfo.set(getInvitationInfo());
     log.debug(
       `invitation info: ${prop("email", invitationInfo)} / ${prop(
+    invitationInfo.set(getInvitationInfo(document.location.toString()));
+    log.warn(
+      `invitation info: ${prop("email", $invitationInfo)} / ${prop(
         "token",
         invitationInfo
+        $invitationInfo
       )}`
     );
 
@@ -39,11 +48,13 @@
       const data = await response.json();
       tenantConfig.set(data);
       log.debug(`tenant configuration: ${tenantConfig}`);
+      log.warn(`tenant configuration: ${tenantConfig}`);
 
       const askAuthAPI = authenticationAPI();
       // Variable that holds the configured auth strategy information for the tenant
       authenticationStrategy = askAuthAPI.getStrategyInfo($tenantConfig);
       log.debug(`authStrategyInfo: ${authenticationStrategy}`);
+      log.warn(`authStrategyInfo: ${authenticationStrategy}`);
 
       // Get data on the user visiting
       user.set(await getCurrentUser());
