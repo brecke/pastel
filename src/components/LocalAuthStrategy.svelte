@@ -1,13 +1,10 @@
 <script lang="ts">
-  import {
-    getLoginRedirectUrl as getRedirectUrl,
-    getInvitationInfo,
-  } from "../helpers/utils";
   import anylogger from "anylogger";
   import "@material/mwc-button";
   import "@material/mwc-textfield";
   import { when, equals, defaultTo, prop, compose, isEmpty, not } from "ramda";
   import { useNavigate } from "svelte-navigator";
+  import { getCurrentUser, redirectUrl, user } from "../stores/user";
 
   import { resetField } from "../helpers/form";
   import { authenticationAPI } from "../helpers/authentication";
@@ -90,18 +87,25 @@
   const postLogin = async (status) => {
     if (succededAuthentication(status)) {
       /**
+       * First thing to do is to fill in the user object
+       * After successful login, the user api will return more data
+       * than the one we have when we first visit the homepage
+       */
+      user.set(await getCurrentUser());
+
+      /**
        * Eventually we will redirect the user to the redirect url
        * In the meantime, while we don't implement all the routes,
        * we'll just move to the activity feed instead
        *
-       * TODO: uncomment these lines, one day
-       * window.location.href = $user.getUserRedirectUrl();
+       * TODO: uncomment this line and place it below, one day
+       * navigate($redirectUrl);
        */
       formValidation = { failed: false, message: "" };
-      log.debug(`Authentication succeeded, redirecting to the activity feed..`);
-      navigate("/dashboard");
-
-      // window.location.href = "/dashboard";
+      log.warn(`Authentication succeeded, redirecting to the activity feed..`);
+      // TODO make this a proper redirect, not hardcoded. Just delete this next line.
+      redirectUrl.set("/dashboard");
+      navigate($redirectUrl);
     } else if (failedAuthentication(status)) {
       formValidation = { failed: true, message: "Wrong credentials" };
       clearPasswordField();
