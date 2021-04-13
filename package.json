@@ -1,5 +1,5 @@
 {
-  "name": "Cake",
+  "name": "pastel",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -32,6 +32,7 @@
     "@material/mwc-button": "^0.20.0",
     "@material/mwc-dialog": "^0.20.0",
     "@material/mwc-textfield": "^0.20.0",
+    "@polymer/iron-icons": "^3.0.1",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "anylogger": "^1.0.11",
     "bulma": "^0.8.2",
