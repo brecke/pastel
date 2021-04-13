@@ -1,8 +1,8 @@
 import { writable } from "svelte/store";
 import { User } from "../models/user";
 import anylogger from "anylogger";
-const log = anylogger("user-store");
 
+const log = anylogger("user-store");
 const user = writable(new User());
 const redirectUrl = writable("");
 const invitationInfo = writable({ email: "", token: "" });
@@ -18,7 +18,7 @@ const getCurrentUser = async () => {
 };
 
 function createTenantConfig() {
-  const { subscribe, set, update } = writable({});
+  const { subscribe, set } = writable({});
 
   return {
     subscribe,
