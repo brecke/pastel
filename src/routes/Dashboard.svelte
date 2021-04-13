@@ -11,7 +11,10 @@
   } from "../stores/activity";
   import NewsFeed from "../components/NewsFeed.svelte";
   import MainLayout from "../components/MainLayout.svelte";
+  import { useLocation, useNavigate } from "svelte-navigator";
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const log = anylogger("oae-dashboard");
   const registerFocus = useFocus();
 

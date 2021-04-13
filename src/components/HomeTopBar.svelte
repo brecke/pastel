@@ -3,7 +3,7 @@
   import LocalAuthStrategy from "./LocalAuthStrategy.svelte";
   import { values, pipe, last, split, equals } from "ramda";
   import anylogger from "anylogger";
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import { user } from "../stores/user";
 
   import "@material/mwc-dialog";
@@ -13,6 +13,7 @@
   const log = anylogger("home-nav");
   const DEFAULT_LOGO = "oae-logo.svg";
 
+  export let goToLogin: string;
   export let authenticationStrategy;
   $: {
     enabledExternalStrategies = values(
@@ -34,6 +35,12 @@
   };
 
   const getHeadingForDialog = () => `Sign in to ${$user.tenant.alias}`;
+
+  afterUpdate(() => {
+    if (equals("true", goToLogin)) {
+      showSignInModal();
+    }
+  });
 
   onMount(async () => {
     try {
@@ -65,7 +72,7 @@
     </div>
     <div class="navbar-end navEnd">
       <div class="navbar-item">
-        {#if $user.isLoggedIn}
+        {#if $user && $user.isLoggedIn}
           <span class="warning">{$user.displayName} is logged in</span>
         {:else}
           <div class="buttons">

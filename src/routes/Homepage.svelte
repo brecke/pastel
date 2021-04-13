@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import { prop } from "ramda";
   import HomeTopBar from "../components/HomeTopBar.svelte";
   import anylogger from "anylogger";
@@ -18,6 +18,7 @@
   const registerFocus = useFocus();
 
   let authenticationStrategy = {};
+  export let goToLogin: string;
 
   onMount(async () => {
     redirectUrl.set(getRedirectUrl(document.location.toString()));
@@ -54,7 +55,7 @@
 </script>
 
 <section class="hero is-primary is-medium">
-  <HomeTopBar {authenticationStrategy} />
+  <HomeTopBar {goToLogin} {authenticationStrategy} />
   <div class="hero-head" />
   <div class="hero-body main-area">
     <div class="container has-text-centered is-centered">

@@ -3,7 +3,7 @@
   import "@material/mwc-button";
   import "@material/mwc-textfield";
   import { when, equals, defaultTo, prop, compose, isEmpty, not } from "ramda";
-  import { useNavigate } from "svelte-navigator";
+  import { useLocation, useNavigate } from "svelte-navigator";
   import { getCurrentUser, redirectUrl, user } from "../stores/user";
 
   import { resetField } from "../helpers/form";
@@ -12,7 +12,9 @@
   import { onMount } from "svelte";
 
   const navigate = useNavigate();
+  const location = useLocation();
   const log = anylogger("local-auth-strategy");
+
   const { STRATEGY_LDAP, STRATEGY_LOCAL } = authConstants;
   const askAuthAPI = authenticationAPI();
   const {
@@ -97,9 +99,8 @@
       formValidation = { failed: false, message: "" };
       log.warn(`Authentication succeeded, redirecting to the activity feed..`);
 
-      // TODO make this a proper redirect, not hardcoded. Just delete this next line.
-      redirectUrl.set("/dashboard");
-      navigate($redirectUrl, { replace: true });
+      const from = ($location.state && $location.state.from) || "/dashboard";
+      navigate(from, { replace: true });
     } else if (failedAuthentication(status)) {
       formValidation = { failed: true, message: "Wrong credentials" };
       clearPasswordField();
