@@ -87,13 +87,6 @@
   const postLogin = async (status) => {
     if (succededAuthentication(status)) {
       /**
-       * First thing to do is to fill in the user object
-       * After successful login, the user api will return more data
-       * than the one we have when we first visit the homepage
-       */
-      user.set(await getCurrentUser());
-
-      /**
        * Eventually we will redirect the user to the redirect url
        * In the meantime, while we don't implement all the routes,
        * we'll just move to the activity feed instead
@@ -103,9 +96,10 @@
        */
       formValidation = { failed: false, message: "" };
       log.warn(`Authentication succeeded, redirecting to the activity feed..`);
+
       // TODO make this a proper redirect, not hardcoded. Just delete this next line.
       redirectUrl.set("/dashboard");
-      navigate($redirectUrl);
+      navigate($redirectUrl, { replace: true });
     } else if (failedAuthentication(status)) {
       formValidation = { failed: true, message: "Wrong credentials" };
       clearPasswordField();
