@@ -3,7 +3,6 @@
   import "@polymer/iron-icons/iron-icons.js";
   import { useFocus } from "svelte-navigator";
   import { onMount } from "svelte";
-  import { getCurrentUser, user } from "../stores/user";
   import {
     activities,
     processedActivities,
@@ -11,20 +10,11 @@
   } from "../stores/activity";
   import NewsFeed from "../components/NewsFeed.svelte";
   import MainLayout from "../components/MainLayout.svelte";
-  import { useLocation, useNavigate } from "svelte-navigator";
 
-  const navigate = useNavigate();
-  const location = useLocation();
   const log = anylogger("oae-dashboard");
   const registerFocus = useFocus();
 
   onMount(async () => {
-    // TODO not sure why this is necessary, but I think it is
-    user.set(await getCurrentUser());
-
-    // TODO debug
-    log.warn($user);
-
     activities.set(await fetchUserActivities());
 
     // TODO debug

@@ -1,4 +1,3 @@
-// import { observable, makeAutoObservable } from 'mobx';
 import { Tenant } from "./tenant";
 
 export class Resource {
@@ -12,8 +11,6 @@ export class Resource {
   visibility: "public" | "private" | "loggedin";
 
   constructor(resourceData) {
-    // makeAutoObservable(this, {});
-
     /**
      * Stuff coming from activity object modelling:
      *

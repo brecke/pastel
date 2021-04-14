@@ -3,7 +3,6 @@
   import "@polymer/iron-icons/social-icons.js";
   import "@polymer/iron-icons/av-icons.js";
 
-  import { beforeUpdate, onMount } from "svelte";
   import anylogger from "anylogger";
   import { useNavigate } from "svelte-navigator";
   import { authenticationAPI } from "../helpers/authentication";
@@ -17,14 +16,6 @@
   const log = anylogger("sidebar");
   const oaeLogo = `/assets/logos/oae-logo.svg`;
   // TODO use default image if no avatar defined
-
-  onMount(async () => {
-    log.warn("on mount");
-  });
-
-  beforeUpdate(() => {
-    log.warn("before update");
-  });
 
   const didLogout = equals(200);
 

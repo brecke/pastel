@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterUpdate, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { prop } from "ramda";
   import HomeTopBar from "../components/HomeTopBar.svelte";
   import anylogger from "anylogger";

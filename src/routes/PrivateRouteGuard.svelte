@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { useNavigate, useLocation, useFocus } from "svelte-navigator";
   import { getCurrentUser, user } from "../stores/user";
