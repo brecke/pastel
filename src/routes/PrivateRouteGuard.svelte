@@ -12,7 +12,7 @@
   const registerFocus = useFocus();
 
   const navigateToLogin = () => {
-    navigate("/login", {
+    navigate("/login" + $location.search, {
       state: { from: $location.pathname },
       replace: true,
     });
