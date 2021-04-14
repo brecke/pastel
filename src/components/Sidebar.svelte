@@ -7,7 +7,7 @@
   import { useNavigate } from "svelte-navigator";
   import { authenticationAPI } from "../helpers/authentication";
   import { equals } from "ramda";
-  import { getCurrentUser, user } from "../stores/user";
+  import { user } from "../stores/user";
 
   const navigate = useNavigate();
   const askAuthAPI = authenticationAPI();
@@ -23,7 +23,6 @@
     try {
       const status = await logout();
       if (didLogout(status)) {
-        user.set(await getCurrentUser());
         navigate("/");
       } else {
         // TODO: trouble logging out

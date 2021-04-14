@@ -6,22 +6,28 @@
   import Dashboard from "./routes/Dashboard.svelte";
   import Library from "./routes/Library.svelte";
   import Groups from "./routes/Groups.svelte";
+
+  /**
+   * A Route path can match parameters with "path/:parameterName" and wildcards with "path/*" or "path/*wildcardName". All parameters and wildcard values will be provided to the component as props. They can also be accessed inside a Route slot via let:params.
+
+   * The Route component will also receive the current location, as well as the navigate function, that is scoped to the current Route as props. They can be accessed inside the Route slot, via let:location and let:navigate.
+  */
 </script>
 
 <Router>
   <Route useFocus path="/">
-    <Homepage let:params let:location let:registerFocus />
+    <Homepage goToLogin="false" />
   </Route>
   <Route path="/login">
-    <Homepage goToLogin="true" let:params let:location let:registerFocus />
+    <Homepage goToLogin="true" />
   </Route>
-  <PrivateRoute path="dashboard" let:params let:location let:registerFocus>
+  <PrivateRoute path="dashboard">
     <Dashboard />
   </PrivateRoute>
-  <PrivateRoute path="library" let:params let:location let:registerFocus>
+  <PrivateRoute path="library">
     <Library />
   </PrivateRoute>
-  <PrivateRoute path="groups" let:params let:location let:registerFocus>
+  <PrivateRoute path="groups">
     <Groups />
   </PrivateRoute>
 </Router>
