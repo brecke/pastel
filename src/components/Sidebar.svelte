@@ -140,7 +140,7 @@
                 aria-haspopup="true"
                 aria-controls="dropdown-menu4"
               >
-                <span>Sarah Jones</span>
+                <span>{$user.displayName}</span>
                 <span class="icon is-small">
                   <i class="fas fa-angle-down" aria-hidden="true" />
                 </span>
